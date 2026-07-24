@@ -1,0 +1,2 @@
+import { ReactNode } from 'react'; import { motion } from 'framer-motion';
+export default function GlassCard({children,className='' }: {children: ReactNode; className?: string}) { return <motion.section initial={{opacity:0,scale:.98}} animate={{opacity:1,scale:1}} transition={{delay:.12,duration:.6}} className={`glass rounded-[2rem] p-6 shadow-glow sm:p-9 ${className}`}>{children}</motion.section> }

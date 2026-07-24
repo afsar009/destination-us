@@ -1,0 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:wght@400;500;600&display=swap');
+@tailwind base; @tailwind components; @tailwind utilities;
+@layer base { * { @apply box-border; } body { @apply min-h-screen bg-ink font-sans text-mist antialiased; } button { @apply outline-none focus-visible:ring-2 focus-visible:ring-champagne; } }
+@layer components { .glass { @apply border border-white/10 bg-white/[.055] backdrop-blur-xl; } .eyebrow { @apply text-[10px] font-semibold uppercase tracking-[.32em] text-champagne/70; } .display { @apply font-display text-5xl leading-[.9] sm:text-7xl; } .orb { @apply pointer-events-none absolute rounded-full blur-3xl; } }

@@ -1,0 +1,2 @@
+import { useLocation } from 'react-router-dom'; const routes = ['/', '/intro', '/question', '/booking', '/restaurant', '/boarding-pass', '/letter', '/gallery', '/finale'];
+export default function Progress(){ const { pathname } = useLocation(); const index = Math.max(0, routes.indexOf(pathname)); return <div className="absolute left-6 right-6 top-6 z-20 h-px bg-white/10"><div className="h-full bg-champagne transition-all duration-700" style={{width:`${(index/(routes.length-1))*100}%`}}/></div> }

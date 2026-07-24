@@ -1,0 +1,2 @@
+import { ReactNode } from 'react'; import { motion } from 'framer-motion';
+export default function PrimaryButton({children,onClick,className=''}:{children:ReactNode;onClick?:()=>void;className?:string}){return <motion.button whileTap={{scale:.97}} whileHover={{y:-2}} onClick={onClick} className={`rounded-full bg-champagne px-6 py-3 text-sm font-semibold text-ink shadow-lg shadow-champagne/15 ${className}`}>{children}</motion.button>}

@@ -1,0 +1,9 @@
+{
+  "name": "destination-us",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "tsc -b && vite build", "preview": "vite preview" },
+  "dependencies": { "@vitejs/plugin-react": "latest", "framer-motion": "latest", "gsap": "latest", "qrcode.react": "latest", "react": "^19.0.0", "react-dom": "^19.0.0", "react-icons": "latest", "react-router-dom": "latest" },
+  "devDependencies": { "@types/react": "latest", "@types/react-dom": "latest", "autoprefixer": "latest", "postcss": "latest", "tailwindcss": "^3.4.17", "typescript": "latest", "vite": "latest", "vite-plugin-pwa": "latest" }
+}

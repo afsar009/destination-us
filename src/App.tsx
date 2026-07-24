@@ -1,7 +1,6 @@
 import { lazy, Suspense } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { MotionConfig } from 'framer-motion';
-import AppShell from './components/AppShell';
-const Splash = lazy(() => import('./pages/Splash')); const Intro = lazy(() => import('./pages/Intro')); const Question = lazy(() => import('./pages/Question')); const Booking = lazy(() => import('./pages/Booking')); const Restaurant = lazy(() => import('./pages/Restaurant')); const BoardingPass = lazy(() => import('./pages/BoardingPass')); const LoveLetter = lazy(() => import('./pages/LoveLetter')); const Gallery = lazy(() => import('./pages/Gallery')); const Finale = lazy(() => import('./pages/Finale'));
-const Loader = () => <div className="grid min-h-screen place-items-center bg-ink text-champagne"><span className="font-display text-3xl italic">Destination Us</span></div>;
-export default function App() { return <MotionConfig reducedMotion="user"><AppShell><Suspense fallback={<Loader/>}><Routes><Route path="/" element={<Splash/>}/><Route path="/intro" element={<Intro/>}/><Route path="/question" element={<Question/>}/><Route path="/booking" element={<Booking/>}/><Route path="/restaurant" element={<Restaurant/>}/><Route path="/boarding-pass" element={<BoardingPass/>}/><Route path="/letter" element={<LoveLetter/>}/><Route path="/gallery" element={<Gallery/>}/><Route path="/finale" element={<Finale/>}/><Route path="*" element={<Navigate to="/" replace/>}/></Routes></Suspense></AppShell></MotionConfig> }
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { AnimatePresence, MotionConfig } from 'framer-motion';
+const Journey = lazy(() => import('./pages/Journey'));
+function RoutedApp(){const location=useLocation();return <Suspense fallback={<div className="loading">Destination Us</div>}><AnimatePresence mode="wait"><Routes location={location} key={location.pathname}>{['/','/intro','/question','/booking','/flight','/boarding-pass','/letter','/andaman'].map(path=><Route key={path} path={path} element={<Journey/>}/>)}<Route path="*" element={<Navigate to="/" replace/>}/></Routes></AnimatePresence></Suspense>}
+export default function App(){return <MotionConfig reducedMotion="user"><RoutedApp/></MotionConfig>}

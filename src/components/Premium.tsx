@@ -1,23 +1,25 @@
-export function CalendarPicker() {
-  const [date, setDate] = useState(
-    new Date().toISOString().slice(0, 16)
-  );
-
-  return (
-    <div>
-      <p className="text-sm font-bold mb-3">
-        Choose our day & time
-      </p>
-
-      <div className="rounded-2xl bg-white/10 p-3 border border-white/10">
-        <input
-          type="datetime-local"
-          value={date}
-          min={new Date().toISOString().slice(0, 16)}
-          onChange={(e) => setDate(e.target.value)}
-          className="w-full bg-transparent text-white outline-none"
-        />
-      </div>
-    </div>
-  );
-}
+import { ReactNode, useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { FiCalendar, FiChevronRight, FiClock, FiHeadphones, FiMapPin, FiX } from 'react-icons/fi';
+import { FaPlane } from 'react-icons/fa';
+import { QRCodeSVG } from 'qrcode.react'; import { gsap } from 'gsap';
+export const steps=['/','/intro','/question','/booking','/flight','/boarding-pass','/letter','/andaman'];
+export function GradientBackground(){return <><div className="orbit" style={{width:400,height:400,background:'#5FA8FF',right:-180,top:-160}}/><div className="orbit" style={{width:360,height:360,background:'#FF7AA8',left:-190,bottom:-120}}/></>}
+export function StarField(){return <div className="stars" aria-hidden>{Array.from({length:28},(_,i)=><i key={i} style={{left:`${(i*37)%100}%`,top:`${(i*71)%88}%`}}/>)}</div>}
+export function AnimatedClouds(){return <><div className="cloud" style={{top:'16%',left:'-70px',animation:'float 15s ease-in-out infinite'}}/><div className="cloud" style={{top:'31%',right:'-100px',opacity:.55,transform:'scale(.65)',animation:'float 19s ease-in-out infinite reverse'}}/></>}
+export function GlassCard({children,className='' }:{children:ReactNode,className?:string}){return <motion.section whileHover={{rotateX:-1,rotateY:1,y:-3}} transition={{type:'spring',stiffness:300,damping:24}} className={`glass rounded-[32px] p-6 sm:p-8 ${className}`}>{children}</motion.section>}
+export function GlassButton({children,onClick,kind='primary'}:{children:ReactNode,onClick?:()=>void,kind?:'primary'|'quiet'}){const click=(e:React.MouseEvent<HTMLButtonElement>)=>{const r=e.currentTarget.getBoundingClientRect(),s=document.createElement('span');s.className='ripple';s.style.cssText=`left:${e.clientX-r.left}px;top:${e.clientY-r.top}px;width:18px;height:18px`;e.currentTarget.append(s);setTimeout(()=>s.remove(),600);onClick?.()};return <motion.button whileHover={{y:-3,boxShadow:'0 14px 28px rgba(0,0,0,.24)'}} whileTap={{scale:.97}} onClick={click} className={`relative overflow-hidden rounded-full px-5 py-3 text-sm font-bold ${kind==='primary'?'bg-[#F6C453] text-[#071320]':'glass text-white'}`}>{children}</motion.button>}
+export function FloatingPlane(){const ref=useRef<HTMLDivElement>(null);useEffect(()=>{const t=gsap.to(ref.current,{y:-12,rotate:-3,duration:2.3,yoyo:true,repeat:-1,ease:'sine.inOut'});return()=>{t.kill();}},[]);return <div ref={ref} aria-hidden><FaPlane className="plane text-5xl text-[#F6C453]"/></div>}
+export function Navbar({path,setPath}:{path:string;setPath:(p:string)=>void}){const n=steps.indexOf(path);return <nav className="nav"><button className="brand" onClick={()=>setPath('/')}>Destination <span className="accent">Us</span></button><span className="text-[11px] tracking-[.18em] text-white/50">0{n+1} / 0{steps.length}</span></nav>}
+export function PageTransition({children}:{children:ReactNode}){const reduce=useReducedMotion();return <motion.div initial={reduce?false:{opacity:0,scale:.98,filter:'blur(12px)',y:24}} animate={{opacity:1,scale:1,filter:'blur(0px)',y:0}} exit={{opacity:0,scale:1.02,filter:'blur(10px)',y:-16}} transition={{duration:.62,ease:[.22,1,.36,1]}}>{children}</motion.div>}
+export function AnimatedQRCode(){return <motion.div initial={{opacity:0,scale:.72}} animate={{opacity:1,scale:1}} transition={{delay:.45,type:'spring'}} className="rounded-2xl bg-white p-3"><QRCodeSVG value="https://destination-us.app/andaman" size={82} fgColor="#071320"/></motion.div>}
+export function BoardingPass(){return <motion.article initial={{y:90,opacity:0}} animate={{y:0,opacity:1}} transition={{type:'spring',damping:21,delay:.12}} className="overflow-hidden rounded-[32px] bg-[#fffdfa] p-6 text-[#071320] shadow-2xl"><div className="flex justify-between"><div><p className="text-[10px] font-bold tracking-[.25em] text-[#102B46]/55">DESTINATION US · BOARDING PASS</p><h2 className="mt-3 text-3xl font-extrabold tracking-tight">Andaman</h2></div><FaPlane className="text-3xl text-[#5FA8FF]"/></div><div className="my-6 border-t border-dashed border-[#102B46]/25"/><div className="grid grid-cols-2 gap-y-5 text-sm"><Ticket label="Passenger" value="Shraddha"/><Ticket label="Captain" value="Vimaan Karmidal"/><Ticket label="Flight" value="DU 0707"/><Ticket label="Gate · Seat" value="US · 02A"/></div><div className="mt-7 flex items-end justify-between"><AnimatedQRCode/><span className="text-right text-xs font-bold tracking-[.18em] text-[#102B46]/55">BOARDING<br/>AT SUNSET</span></div></motion.article>}
+function Ticket({label,value}:{label:string,value:string}){return <div><p className="text-[9px] font-bold uppercase tracking-[.18em] text-[#102B46]/50">{label}</p><p className="mt-1 font-semibold">{value}</p></div>}
+export function CalendarPicker(){const [date,setDate]=useState(new Date().toISOString().slice(0,16));return <div><p className="text-sm font-bold">Choose our day & time</p><div className="mt-4 rounded-2xl bg-white/10 border border-white/10 p-3"><input type="datetime-local" value={date} min={new Date().toISOString().slice(0,16)} onChange={e=>setDate(e.target.value)} className="w-full bg-transparent text-white outline-none"/></div></div>}
+export function TimePicker(){const [time,setTime]=useState('18:30');return <div className="mt-7"><p className="text-sm font-bold">Arrive unhurried</p><div className="mt-3 flex gap-2">{['17:30','18:30','19:30'].map(t=><button onClick={()=>setTime(t)} className={`rounded-full px-4 py-2 text-xs font-bold ${t===time?'bg-[#F6C453] text-[#071320]':'bg-white/8 text-white/65'}`}><FiClock className="mr-1 inline"/>{t}</button>)}</div></div>}
+export function ExperienceCard({title,copy,selected,onClick}:{title:string;copy:string;selected?:boolean;onClick:()=>void}){return <button onClick={onClick} className={`glass rounded-2xl p-4 text-left transition ${selected?'border-[#F6C453] bg-[#F6C453]/10':'hover:bg-white/10'}`}><span className="text-xs font-bold text-[#F6C453]">EXPERIENCE</span><h3 className="mt-2 font-bold">{title}</h3><p className="mt-1 text-xs leading-5 text-white/55">{copy}</p></button>}
+export function RestaurantCard({name,description,rating,selected,onClick}:{name:string;description:string;rating:string;selected?:boolean;onClick:()=>void}){return <motion.button whileHover={{x:3}} onClick={onClick} className={`mt-3 flex w-full gap-4 rounded-2xl border p-4 text-left transition ${selected?'border-[#F6C453] bg-[#F6C453]/10':'border-transparent bg-white/7 hover:bg-white/12'}`}><div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-[#FF7AA8]/20 text-[#FF7AA8]"><FiMapPin/></div><div><p className="font-bold">{name}</p><p className="mt-1 text-xs text-white/55">{description} · {rating} ★</p></div></motion.button>}
+export function LoveLetter(){const [open,setOpen]=useState(false); const text='Shraddha, some places are beautiful because of where they are. And some become unforgettable because of who is beside you. I cannot wait to see Andaman through your eyes.';return <div className="relative"><motion.button aria-expanded={open} onClick={()=>setOpen(true)} animate={open?{rotateX:180}:{}} className="relative h-36 w-full rounded-[28px] bg-gradient-to-br from-[#FF7AA8] to-[#c84d79] shadow-xl"><span className="text-xs font-bold tracking-[.2em]">FOR SHRADDHA</span></motion.button><AnimatePresence>{open&&<motion.article initial={{y:-70,opacity:0}} animate={{y:-110,opacity:1}} className="relative mx-4 rounded-2xl bg-[#fffaf3] p-6 text-[#102B46] shadow-2xl"><p className="font-serif text-xl leading-8">{text}</p><p className="mt-5 text-sm font-bold text-[#FF7AA8]">— Vimaan</p></motion.article>}</AnimatePresence></div>}
+export function FloatingMusicButton(){const [on,setOn]=useState(false);return <button onClick={()=>setOn(!on)} aria-label="Toggle ambient music" className="fixed bottom-6 right-6 z-20 grid h-12 w-12 place-items-center rounded-full bg-[#F6C453] text-[#071320] shadow-lg"><FiHeadphones className={on?'animate-pulse':''}/></button>}
+export function BottomSheet({children,open,onClose}:{children:ReactNode;open:boolean;onClose:()=>void}){return <AnimatePresence>{open&&<motion.div className="fixed inset-0 z-30 bg-[#071320]/70 p-4 backdrop-blur-sm" onClick={onClose}><motion.section onClick={e=>e.stopPropagation()} initial={{y:'100%'}} animate={{y:0}} exit={{y:'100%'}} className="absolute bottom-0 left-0 right-0 rounded-t-[32px] bg-[#102B46] p-7"><button aria-label="Close" onClick={onClose} className="float-right"><FiX/></button>{children}</motion.section></motion.div>}</AnimatePresence>}
+export const Modal = BottomSheet;
